@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+:root {
+  /* Brand */
+  --primary: #2563eb;
+  --secondary: #16a34a;
+
+  /* Background */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --muted: #f1f5f9;
+
+  /* Text */
+  --text: #0f172a;
+  --text-muted: #64748b;
+
+  /* Borders */
+  --border: #e2e8f0;
+
+  /* Soft brand backgrounds */
+  --primary-light: #eff6ff;
+  --secondary-light: #dcfce7;
+
+  /* Radius scale (used by shadcn component sizes) */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+}
+
+/* Bridge the palette above into Tailwind color utilities (bg-*, text-*, border-*, ring-*) */
+@theme {
+  --font-sans: var(--font-geist-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--text);
+  --color-surface: var(--surface);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--surface);
+  --color-primary-light: var(--primary-light);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--surface);
+  --color-secondary-light: var(--secondary-light);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--text-muted);
+
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--text);
+
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+
+  /* Only non-brand color kept — required by shadcn destructive (logout/delete) styling */
+  --color-destructive: #dc2626;
+}

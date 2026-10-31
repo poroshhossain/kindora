@@ -8,6 +8,17 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
+  // better-sqlite3 (Better Auth database) is a native module — must stay external
+  serverExternalPackages: ["better-sqlite3"],
+  images: {
+    remotePatterns: [
+      // Gallery / seeded event photos use picsum (redirects to fastly host)
+      { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "fastly.picsum.photos" },
+      // Event banners added via Create Event may use Unsplash links
+      { protocol: "https", hostname: "images.unsplash.com" },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {
