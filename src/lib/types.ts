@@ -1,11 +1,11 @@
-/** Shape of an event as returned by the Kindora REST API. */
-export type EventRecord = {
-  id: string;
+
+export interface EventRecord {
+  _id: string;
   title: string;
   description: string;
-  image: string;
-  /** ISO date string (serialized) */
-  date: string;
+  eventType: string;
+  thumbnail: string;
   location: string;
-  postedByName?: string;
-};
+  eventDate: string;
+  createdBy: string;
+}

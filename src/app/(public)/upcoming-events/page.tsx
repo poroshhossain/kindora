@@ -1,11 +1,14 @@
-import { API_BASE_URL } from "@/lib/api"
+import Events from "@/components/events/Events";
+import { Suspense } from "react";
 
 const UpcomingEventsPage = async () => {
-  const res = await fetch(`${API_BASE_URL}/events`);
-  const data = await res.json();
-  console.log(data)
+
   return (
-    <div>UpcomingEventsPage</div>
+    <>
+      <Suspense fallback={ <p>Lodding...</p> }>
+        <Events />
+      </Suspense>
+    </>
   )
 }
 export default UpcomingEventsPage
