@@ -20,7 +20,7 @@ const Events = async () => {
   } catch (error) {
     console.error("Events fetching error:", error);
   }
-  
+
 const today = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Dhaka",
 }).format(new Date());
@@ -28,6 +28,7 @@ const today = new Intl.DateTimeFormat("en-CA", {
 const upcomingEvents = eventsData
   .filter((event) => event.eventDate >= today)
   .sort((a, b) => a.eventDate.localeCompare(b.eventDate));
+  
   return (
     <section className="bg-slate-50 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

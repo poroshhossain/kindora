@@ -25,7 +25,7 @@ const EventsSkeleton = () => {
               className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
             >
               {/* Thumbnail */}
-              <Skeleton className="aspect-[16/10] w-full rounded-none" />
+              <Skeleton className="aspect-16/10 w-full rounded-none" />
 
               <div className="p-5">
 

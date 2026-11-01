@@ -26,7 +26,7 @@ const EventCard = ({ event }: EventCardProps) => {
     <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5">
 
       {/* Thumbnail */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+      <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
 
         <Image
           src={event.thumbnail}
@@ -70,7 +70,7 @@ const EventCard = ({ event }: EventCardProps) => {
         {/* View Event Button */}
         <div className="mt-6 border-t border-slate-100 pt-4">
           <Link
-            href={`/events/${event._id}`}
+            href={`/upcoming-events/${event._id}`}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-700 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
           >
             View Event
