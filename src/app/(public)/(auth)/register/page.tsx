@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { GoogleIcon } from "@/components/auth/google-icon";
@@ -21,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { authClient } from "@/lib/auth-client";
 
 /**
  * Password rules (assignment spec):
@@ -58,8 +55,6 @@ type RegisterValues = z.infer<typeof registerSchema>;
 const fieldErrorClasses = "mt-1 text-xs font-medium text-destructive";
 
 export default function RegisterPage() {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -70,33 +65,13 @@ export default function RegisterPage() {
   });
 
   const onRegister = handleSubmit(async (values) => {
-    const { error } = await authClient.signUp.email({
-      name: values.name,
-      email: values.email,
-      password: values.password,
-      image: values.photoUrl || undefined,
-    });
-
-    if (error) {
-      toast.error(error.message ?? "Registration failed. Please try again.");
-      return;
-    }
-
-    toast.success("Registration successful! Welcome to Kindora.");
-    router.push("/");
+    // TODO: replace with your custom registration implementation.
+    console.debug("[register] submit", values);
   });
 
-  async function onGoogleSignup() {
-    const { error } = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/",
-    });
-
-    if (error) {
-      toast.error(
-        `Google login failed. Is GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET configured? (${error.message})`,
-      );
-    }
+  function onGoogleSignup() {
+    // TODO: replace with your custom Google sign-up implementation.
+    console.debug("[register] google sign-up");
   }
 
   return (

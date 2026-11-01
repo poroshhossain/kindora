@@ -9,9 +9,16 @@ import ThemeToggle from "@/components/theme-toggle";
 import HeaderAction from "./HeaderAction";
 
 const navItems = [
+  
   {
     label: "Upcoming Events",
     href: "/upcoming-events",
+    icon: CalendarDays,
+  },
+
+  {
+    label: "create-event",
+    href: "/create-event",
     icon: CalendarDays,
   },
 ];

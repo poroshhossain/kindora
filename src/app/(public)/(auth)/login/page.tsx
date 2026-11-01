@@ -3,10 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { GoogleIcon } from "@/components/auth/google-icon";
@@ -22,7 +20,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z
@@ -38,7 +35,6 @@ type LoginValues = z.infer<typeof loginSchema>;
 const fieldErrorClasses = "mt-1 text-xs font-medium text-destructive";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -51,33 +47,13 @@ export default function LoginPage() {
   });
 
   const onLogin = handleSubmit(async (values) => {
-    const { error } = await authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-    });
-
-    if (error) {
-      toast.error(
-        error.message ?? "Login failed. Check your credentials and try again.",
-      );
-      return;
-    }
-
-    toast.success("Login successful! Welcome back.");
-    router.push("/");
+    // TODO: replace with your custom sign-in implementation.
+    console.debug("[login] submit", values);
   });
 
-  async function onGoogleLogin() {
-    const { error } = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/",
-    });
-
-    if (error) {
-      toast.error(
-        `Google login failed. Is GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET configured? (${error.message})`,
-      );
-    }
+  function onGoogleLogin() {
+    // TODO: replace with your custom Google sign-in implementation.
+    console.debug("[login] google sign-in");
   }
 
   return (

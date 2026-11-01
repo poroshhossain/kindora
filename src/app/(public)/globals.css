@@ -5,6 +5,16 @@
 /* Class-based dark mode (next-themes toggles .dark on <html>) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Reserve the scrollbar gutter symmetrically so navigating between short pages
+   (no scrollbar) and long pages (scrollbar) never shifts the layout sideways,
+   and mx-auto containers center within the physical window, not the narrow
+   scrollport. (MDN's sanctioned pattern for scrollbar-centered layouts.) */
+@layer base {
+  html {
+    scrollbar-gutter: stable both-edges;
+  }
+}
+
 :root {
   /* Brand */
   --primary: #2563eb;

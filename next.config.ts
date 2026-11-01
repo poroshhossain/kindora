@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
-  // better-sqlite3 (Better Auth database) is a native module — must stay external
-  serverExternalPackages: ["better-sqlite3"],
   images: {
     remotePatterns: [
       // Gallery / seeded event photos use picsum (redirects to fastly host)

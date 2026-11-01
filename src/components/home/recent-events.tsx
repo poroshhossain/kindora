@@ -2,9 +2,7 @@ import { ArrowRight, CalendarPlus } from "lucide-react";
 import Link from "next/link";
 import { connection } from "next/server";
 
-import EventCard from "@/components/events/event-card";
 import { buttonVariants } from "@/components/ui/button";
-import { getRecentEvents } from "@/lib/events";
 import { cn } from "cn";
 
 export default async function RecentEvents() {
@@ -13,10 +11,6 @@ export default async function RecentEvents() {
   await connection();
   // Fail soft: if MongoDB is unreachable (e.g. not running) show the empty
   // state instead of breaking the whole homepage. Logged so it's discoverable.
-  const events = await getRecentEvents(6).catch((error) => {
-    console.warn("[home] MongoDB unavailable, showing empty state:", error);
-    return [];
-  });
 
   return (
     <section className="border-b border-border bg-muted/40">
@@ -46,7 +40,7 @@ export default async function RecentEvents() {
           </Link>
         </div>
 
-        {events?.length === 0 || !events ? (
+        {/* {events?.length === 0 || !events ? (
           <div className="mt-12 flex flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background px-6 py-16 text-center">
             <span className="inline-flex size-12 items-center justify-center rounded-full bg-primary-light text-primary">
               <CalendarPlus className="size-6" />
@@ -73,7 +67,7 @@ export default async function RecentEvents() {
               <EventCard key={event.id} event={event} />
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

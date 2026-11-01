@@ -1,9 +1,8 @@
 "use client";
 
-import { Loader2, LogOutIcon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,51 +13,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient, type Session } from "@/lib/auth-client";
 import HeaderActionItem from "./HeaderActionItem";
 
-export default function HeaderAction() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
+/**
+ * Minimal user shape for the account dropdown UI.
+ * Adapt it (or swap for your own type) when you wire up custom auth.
+ */
+export type AuthUser = {
+  name?: string | null;
+  email: string;
+  image?: string | null;
+};
 
-  async function handleLogout() {
-    await authClient.signOut();
-    toast.success("Logged out successfully.");
-    router.push("/");
-  }
-
-  if (isPending) {
-    return (
-      <Button variant="ghost" size="icon" className="cursor-default" disabled>
-        <Loader2 className="size-4 animate-spin text-muted-foreground" />
-      </Button>
-    );
-  }
-
-  if (!session) {
-    return (
-      <Button
-        variant="default"
-        size="sm"
-        className="cursor-pointer px-3 font-medium"
-        render={<Link href="/login" />}
-      >
-        Login
-      </Button>
-    );
-  }
-
-  return <SignedInHeaderAction session={session} onLogout={handleLogout} />;
-}
-
-function SignedInHeaderAction({
-  session,
+/**
+ * Signed-in account dropdown. UI only — render it from HeaderAction (or
+ * anywhere else) once your custom auth provides a user.
+ */
+export function SignedInHeaderAction({
+  user,
   onLogout,
 }: {
-  session: Session;
+  user: AuthUser;
   onLogout: () => void;
 }) {
-  const user = session.user;
   const fallback = user.name
     ? user.name
         .split(" ")
@@ -103,5 +80,22 @@ function SignedInHeaderAction({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export default function HeaderAction() {
+  // TODO: wire up your custom auth here — render a loading state while the
+  // session resolves, and <SignedInHeaderAction user={...} onLogout={...} />
+  // (with your own sign-out logic) when a user is signed in.
+  return (
+    <Button
+      variant="default"
+      size="sm"
+      className="cursor-pointer px-3 font-medium"
+      nativeButton={false}
+      render={<Link href="/login" />}
+    >
+      Login
+    </Button>
   );
 }
