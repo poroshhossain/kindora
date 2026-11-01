@@ -49,7 +49,7 @@ export default function Newsletter() {
                 name="email"
                 type="email"
                 placeholder="Enter your email address"
-                className="h-11 flex-1 border-white/30 bg-white/95 text-foreground placeholder:text-muted-foreground"
+                className="h-11 flex-1 border-white/30 bg-white/95 text-[#0f172a] placeholder:text-[#64748b]"
               />
               <Button
                 type="button"

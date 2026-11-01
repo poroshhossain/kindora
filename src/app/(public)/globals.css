@@ -2,10 +2,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Class-based dark mode (next-themes toggles .dark on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Brand */
   --primary: #2563eb;
+  --primary-foreground: #ffffff;
   --secondary: #16a34a;
+  --secondary-foreground: #ffffff;
 
   /* Background */
   --background: #f8fafc;
@@ -23,6 +28,9 @@
   --primary-light: #eff6ff;
   --secondary-light: #dcfce7;
 
+  /* Non-brand destructive + soft destructive backgrounds */
+  --destructive: #dc2626;
+
   /* Radius scale (used by shadcn component sizes) */
   --radius: 0.625rem;
   --radius-sm: calc(var(--radius) * 0.6);
@@ -39,11 +47,11 @@
   --color-surface: var(--surface);
 
   --color-primary: var(--primary);
-  --color-primary-foreground: var(--surface);
+  --color-primary-foreground: var(--primary-foreground);
   --color-primary-light: var(--primary-light);
 
   --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--surface);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-light: var(--secondary-light);
 
   --color-muted: var(--muted);
@@ -63,5 +71,27 @@
   --color-ring: var(--primary);
 
   /* Only non-brand color kept — required by shadcn destructive (logout/delete) styling */
-  --color-destructive: #dc2626;
+  --color-destructive: var(--destructive);
+}
+
+/* Dark palette — slate night with the same blue/green brand accents */
+.dark {
+  --primary: #60a5fa;
+  --primary-foreground: #0b1220;
+  --secondary: #22c55e;
+  --secondary-foreground: #052e16;
+
+  --background: #020617;
+  --surface: #0f172a;
+  --muted: #1e293b;
+
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+
+  --border: #1e293b;
+
+  --primary-light: #172554;
+  --secondary-light: #052e16;
+
+  --destructive: #f87171;
 }

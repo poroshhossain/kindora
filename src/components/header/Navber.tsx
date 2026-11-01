@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-
+import ThemeToggle from "@/components/theme-toggle";
 import HeaderAction from "./HeaderAction";
 
 const navItems = [
@@ -35,7 +35,15 @@ export default function Navbar() {
             width={150}
             height={100}
             priority
-            className="h-auto w-28 object-contain sm:w-32"
+            className="h-auto w-28 object-contain sm:w-32 dark:hidden"
+          />
+          <Image
+            src="/images/kindora-logo-dark.png"
+            alt="Kindora"
+            width={150}
+            height={100}
+            priority
+            className="hidden h-auto w-28 object-contain sm:w-32 dark:block"
           />
         </Link>
 
@@ -62,13 +70,17 @@ export default function Navbar() {
           })}
 
           <div className="ml-2 border-l border-border pl-3">
-            <HeaderAction />
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <HeaderAction />
+            </div>
           </div>
         </div>
 
         {/* Mobile Actions */}
         <div className="flex items-center gap-2 md:hidden">
           <HeaderAction />
+          <ThemeToggle />
 
           <button
             type="button"
