@@ -20,15 +20,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { loginSchema } from "@/components/auth/zod";
 
-const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required.")
-    .email("Enter a valid email address."),
-  password: z.string().min(1, "Password is required."),
-});
+
 
 type LoginValues = z.infer<typeof loginSchema>;
 
@@ -46,15 +43,34 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
+  const router = useRouter();
+
   const onLogin = handleSubmit(async (values) => {
-    // TODO: replace with your custom sign-in implementation.
-    console.debug("[login] submit", values);
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
+      });
+
+      if (data) {
+        toast.success("Login successful!");
+        router.push("/");
+        router.refresh();
+      }
+      if (error) {
+        toast.error(error.message || "Login failed");
+        return;
+      }
+
+
+
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   });
 
-  function onGoogleLogin() {
-    // TODO: replace with your custom Google sign-in implementation.
-    console.debug("[login] google sign-in");
-  }
 
   return (
     <div className="w-full max-w-md">

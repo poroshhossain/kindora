@@ -6,10 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
-import HeaderAction from "./HeaderAction";
+import { authClient } from "@/lib/auth-client";
+import LogginUser from "./LogginUser";
 
 const navItems = [
-  
+
   {
     label: "Upcoming Events",
     href: "/upcoming-events",
@@ -32,6 +33,8 @@ const navItems = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data: session } = authClient.useSession();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
@@ -70,11 +73,10 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
               >
                 <Icon className="size-4" />
                 {item.label}
@@ -85,14 +87,14 @@ export default function Navbar() {
           <div className="ml-2 border-l border-border pl-3">
             <div className="flex items-center gap-1">
               <ThemeToggle />
-              <HeaderAction />
+              {session?.user ? (<LogginUser user={session.user}/>) : ( <><button>Login</button></> )}
             </div>
           </div>
         </div>
 
         {/* Mobile Actions */}
         <div className="flex items-center gap-2 md:hidden">
-          <HeaderAction />
+          {/* <HeaderAction /> */}
           <ThemeToggle />
 
           <button
@@ -126,11 +128,10 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors ${isActive
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
                 >
                   <Icon className="size-4" />
                   {item.label}
