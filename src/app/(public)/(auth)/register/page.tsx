@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { GoogleIcon } from "@/components/auth/google-icon";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,36 +18,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
+import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
+import { toast } from "sonner";
+import { registerSchema } from "@/components/auth/zod";
+import { useRouter } from "next/navigation";
 
-/**
- * Password rules (assignment spec):
- * - at least one uppercase letter
- * - at least one lowercase letter
- * - minimum length of 6 characters
- */
-const passwordSchema = z
-  .string()
-  .min(6, "Password must be at least 6 characters long.")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter.");
 
-const registerSchema = z.object({
-  name: z.string().trim().min(1, "Name is required."),
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required.")
-    .email("Enter a valid email address."),
-  photoUrl: z
-    .string()
-    .trim()
-    .refine(
-      (value) => value === "" || /^https?:\/\/\S+$/.test(value),
-      "Photo URL must be a valid URL starting with http(s)://",
-    )
-    .optional(),
-  password: passwordSchema,
-});
 
 type RegisterValues = z.infer<typeof registerSchema>;
 
@@ -64,15 +40,30 @@ export default function RegisterPage() {
     defaultValues: { name: "", email: "", photoUrl: "", password: "" },
   });
 
+  const router = useRouter();
   const onRegister = handleSubmit(async (values) => {
-    // TODO: replace with your custom registration implementation.
-    console.debug("[register] submit", values);
+    try {
+      const { photoUrl, ...userData } = values;
+
+      const { data, error } = await authClient.signUp.email({
+        ...userData,
+        image: photoUrl || undefined,
+      });
+      if (data) {
+        toast.success("Account created successfully!");
+        router.replace('/')
+      }
+      if (error) {
+        toast.error(error.message || "Registration failed");
+        return;
+      }
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   });
 
-  function onGoogleSignup() {
-    // TODO: replace with your custom Google sign-up implementation.
-    console.debug("[register] google sign-up");
-  }
 
   return (
     <div className="w-full max-w-md">
@@ -175,15 +166,7 @@ export default function RegisterPage() {
             <Separator className="flex-1" />
           </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-4 w-full"
-            onClick={onGoogleSignup}
-          >
-            <GoogleIcon />
-            Continue with Google
-          </Button>
+          <BtnWithGoogle />
         </CardContent>
 
         <CardFooter className="justify-center border-t text-sm">

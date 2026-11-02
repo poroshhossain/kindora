@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { GoogleIcon } from "@/components/auth/google-icon";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
 
 const loginSchema = z.object({
   email: z
@@ -125,15 +125,7 @@ export default function LoginPage() {
             <Separator className="flex-1" />
           </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={onGoogleLogin}
-          >
-            <GoogleIcon />
-            Continue with Google
-          </Button>
+          <BtnWithGoogle />
         </CardContent>
 
         <CardFooter className="justify-center border-t text-sm">
