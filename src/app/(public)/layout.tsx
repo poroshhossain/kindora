@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import Footer from "@/components/footer/Footer";
 import Navber from "@/components/header/Navber";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col bg-background text-foreground">
-          <Navber />
+          <Suspense fallback={ <p>Lodding...</p> }>
+            <Navber />
+          </Suspense>
           <main className="flex-1">{children}</main>
           <Footer />
         <Toaster richColors position="top-center" theme="system" />
