@@ -1,48 +1,37 @@
 
-import { API_BASE_URL } from "@/lib/api";
 import { EventRecord } from "@/lib/types";
 import EventsExplorer from "./EventsExplorer";
+import { getEventsApi } from "@/lib/api";
 
 const Events = async () => {
-  let eventsData: EventRecord[] = [];
 
-  try {
-    const res = await fetch(`${API_BASE_URL}/events`, {
-      cache: "no-store",
-    });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch events");
-    }
+  const eventsData: EventRecord[] = await getEventsApi();
 
-    eventsData = await res.json();
-  } catch (error) {
-    console.error("Events fetching error:", error);
-  }
 
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Dhaka",
   }).format(new Date());
 
-const upcomingEvents = eventsData
-  .filter((event) => {
-    if (!event.eventDate) return false;
+  const upcomingEvents = eventsData
+    .filter((event) => {
+      if (!event.eventDate) return false;
 
-    const eventDate = new Date(event.eventDate);
+      const eventDate = new Date(event.eventDate);
 
-    if (Number.isNaN(eventDate.getTime())) return false;
+      if (Number.isNaN(eventDate.getTime())) return false;
 
-    const formattedDate = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Dhaka",
-    }).format(eventDate);
+      const formattedDate = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Dhaka",
+      }).format(eventDate);
 
-    return formattedDate >= today;
-  })
-  .sort(
-    (a, b) =>
-      new Date(a.eventDate).getTime() -
-      new Date(b.eventDate).getTime()
-  );
+      return formattedDate >= today;
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.eventDate).getTime() -
+        new Date(b.eventDate).getTime()
+    );
 
 
   return <EventsExplorer events={upcomingEvents} />;

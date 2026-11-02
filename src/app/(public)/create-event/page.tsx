@@ -36,7 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { API_BASE_URL } from "@/lib/api";
+import { API_BASE_URL, postEventApi } from "@/lib/api";
 
 // ----------------------------------
 // 1. Event Constants
@@ -129,7 +129,7 @@ const createEventSchema = z.object({
     .max(160, "Maximum 160 characters allowed."),
 });
 
-type CreateEventValues = z.infer<typeof createEventSchema>;
+export type CreateEventValues = z.infer<typeof createEventSchema>;
 
 // ----------------------------------
 // 4. Reusable Error Component
@@ -188,7 +188,6 @@ export default function CreateEventForm() {
 
   const onSubmit = async (values: CreateEventValues) => {
     try {
-      // Match frontend values with backend data structure
       const eventData = {
         title: values.title,
         description: values.description,
@@ -198,34 +197,20 @@ export default function CreateEventForm() {
         eventDate: values.date,
       };
 
-      const response = await fetch(`${API_BASE_URL}/events`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventData),
-      });
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        toast.error(
-          data?.message || "Failed to create event. Please try again."
-        );
-        return;
-      }
+      await postEventApi(eventData);
 
       toast.success("Event created successfully!");
 
       router.push("/upcoming-events");
       router.refresh();
-      
 
     } catch (error) {
       console.error("Create event error:", error);
 
       toast.error(
-        "Network error. Please check your connection and try again."
+        error instanceof Error
+          ? error.message
+          : "Failed to create event."
       );
     }
   };

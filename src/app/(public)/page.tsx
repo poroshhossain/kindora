@@ -1,17 +1,10 @@
 import { Suspense } from "react";
 
-import Features from "@/components/home/features";
-import Gallery from "@/components/home/gallery";
-import Hero from "@/components/home/hero";
-import Newsletter from "@/components/home/newsletter";
-import RecentEvents from "@/components/home/recent-events";
 import { HeroSection } from "@/components/HomeCom/HeroSection";
 import { ImpactStats } from "@/components/HomeCom/ImpactStats";
 import { BentoFeatures } from "@/components/HomeCom/BentoFeatures";
 import { RecentEventsGrid } from "@/components/HomeCom/RecentEventsGrid";
-import { API_BASE_URL } from "@/lib/api";
 import { SocialEvent } from "@/types";
-import { EventRecord } from "@/lib/types";
 import { PhotoGallery } from "@/components/HomeCom/PhotoGallery";
 import { NewsletterCTA } from "@/components/HomeCom/NewsletterCTA";
 
@@ -82,26 +75,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* <Hero />
-      <Features />
-   
-
-      <Suspense
-        fallback={
-          <section className="border-b border-border bg-muted/40">
-            <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-              <p className="text-center text-sm text-muted-foreground">
-                Loading upcoming events…
-              </p>
-            </div>
-          </section>
-        }
-      >
-        <RecentEvents />
-      </Suspense>
-      <Gallery />
-      <Newsletter /> */}
-
       <HeroSection />
       <ImpactStats />
       <BentoFeatures />
