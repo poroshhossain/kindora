@@ -21,6 +21,12 @@ const navItems = [
     href: "/create-event",
     icon: CalendarDays,
   },
+
+  {
+    label: "join-events",
+    href: "/join-events",
+    icon: CalendarDays,
+  },
 ];
 
 export default function Navbar() {
