@@ -87,7 +87,7 @@ export default function Navbar() {
           <div className="ml-2 border-l border-border pl-3">
             <div className="flex items-center gap-1">
               <ThemeToggle />
-              {session?.user ? (<LogginUser user={session.user}/>) : ( <><button>Login</button></> )}
+              {session?.user ? (<LogginUser user={session.user}/>) : ( <Link className="text-primary capitalize text-[18px]" href='/login'>Login</Link> )}
             </div>
           </div>
         </div>

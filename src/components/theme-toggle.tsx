@@ -6,15 +6,6 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-/**
- * Light/dark toggle.
- *
- * The icon swap is CSS-driven (dark: variant) so the icon itself matches the
- * server-rendered HTML. `resolvedTheme` is only correct after hydration, so
- * the label derives from a `mounted` flag — the first client render then
- * always matches the server output and React doesn't warn about the
- * aria-label attribute.
- */
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -23,7 +14,21 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  const isDark = mounted && resolvedTheme === "dark";
+  if (!mounted) {
+    return (
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded-full"
+        disabled
+        aria-label="Loading theme"
+      >
+        <Sun className="size-4" />
+      </Button>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <Button
@@ -31,10 +36,13 @@ export default function ThemeToggle() {
       size="icon"
       className="rounded-full"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      <Sun className="hidden size-4 dark:block" />
-      <Moon className="size-4 dark:hidden" />
+      {isDark ? (
+        <Sun className="size-4" />
+      ) : (
+        <Moon className="size-4" />
+      )}
     </Button>
   );
 }

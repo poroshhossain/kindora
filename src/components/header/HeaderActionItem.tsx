@@ -16,7 +16,7 @@ const HeaderActionItem = () => {
                     return (
                         <DropdownMenuItem key={item.lavel}>
                             <Link href={item.path} className="flex items-center gap-2" >
-                               <Icon/>
+                               <Icon size={3}/>
                                 {item.lavel}</Link>
                         </DropdownMenuItem>
                     )

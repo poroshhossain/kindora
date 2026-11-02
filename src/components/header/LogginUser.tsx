@@ -2,13 +2,6 @@
 "use client"
 
 import {
-    CalendarCheck,
-    CalendarCog,
-    CalendarPlus,
-    LogOutIcon,
-} from "lucide-react"
-
-import {
     Avatar,
     AvatarFallback,
     AvatarImage,
@@ -23,6 +16,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import HeaderActionItem from "./HeaderActionItem"
+import LogOut from "../auth/LogOut"
 
 interface UserType {
     id: string;
@@ -50,8 +44,7 @@ const LogginUser = ({ user }: { user: UserType }) => {
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <LogOutIcon />
-                    Sign Out
+                    <LogOut />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
