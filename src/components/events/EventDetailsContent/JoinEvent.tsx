@@ -1,34 +1,84 @@
-"use client"
-import { useAuth } from "@/context/authContext"
-import { EventRecord } from "@/lib/types"
-import { ArrowUpRight } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { postJoinEvent } from "@/lib/api";
+import { authClient } from "@/lib/auth-client";
+import { EventRecord } from "@/lib/types";
+import { ArrowUpRight, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface JoinEventProps {
-    event: EventRecord
+  event: EventRecord;
 }
-const JoinEvent = ({ event }: JoinEventProps) => {
-    const router = useRouter()
-    const { addToJoin, setAddToJoin } = useAuth();
-    const isJoined = addToJoin?._id === event._id;
-    const handleAddToJoin = (item:EventRecord) => {
-        if (isJoined) return;
-        setAddToJoin(item)
-        toast.success("Event joined successfully!");
-        router.replace('/join-events')
 
+const JoinEvent = ({ event }: JoinEventProps) => {
+  const router = useRouter();
+
+  const [isJoined, setIsJoined] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: session } = authClient.useSession();
+
+  const handleAddToJoin = async () => {
+    // Authentication check
+    if (!session?.user?.email) {
+      router.push("/sign-in");
+      return;
     }
 
-    return (
-        <button
-            disabled={isJoined}
-            onClick={() => handleAddToJoin(event)}
-            className="mt-8 cursor-pointer flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-5 py-4 text-sm font-bold text-secondary-foreground shadow-md shadow-secondary/15 transition hover:-translate-y-0.5 hover:opacity-90"
-        >
-            {isJoined ? "Already Selected" : "Login to Join Event"}
-            <ArrowUpRight size={18} />
-        </button>
-    )
-}
-export default JoinEvent
+    if (isJoined || isLoading) return;
+
+    try {
+      setIsLoading(true);
+
+      const result = await postJoinEvent(
+        event._id,
+        session.user.email
+      );
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+
+      setIsJoined(true);
+
+      toast.success("Event joined successfully!");
+
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to join event"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Button
+      disabled={isJoined || isLoading}
+      onClick={handleAddToJoin}
+      className="mt-8 flex w-full items-center justify-center gap-2"
+    >
+      {isLoading ? (
+        <>
+          <Loader2 className="animate-spin" size={18} />
+          Joining...
+        </>
+      ) : isJoined ? (
+        "Already Joined"
+      ) : (
+        <>
+          Join Event
+          <ArrowUpRight size={18} />
+        </>
+      )}
+    </Button>
+  );
+};
+
+export default JoinEvent;

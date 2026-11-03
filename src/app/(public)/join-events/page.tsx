@@ -1,12 +1,10 @@
-"use client"
-import { useAuth } from "@/context/authContext"
+import JoinedEvents from "@/components/events/JoinedEvents/JoinedEvents"
 
 const JoinEventPage = () => {
-    const {addToJoin}= useAuth();
   return (
-    <div>JoinEventPage{addToJoin?.title}
-    {addToJoin?.description}
-    </div>
+    <>
+      <JoinedEvents />
+    </>
   )
 }
 export default JoinEventPage

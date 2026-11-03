@@ -4,7 +4,7 @@ import Link from "next/link"
 
 const headerLinks = [
     { lavel: ' Create Event', path: '/create-event', icon: CalendarPlus },
-    { lavel: ' Manage Events', path: '/', icon: CalendarCog },
+    { lavel: ' Manage Events', path: '/manage-events', icon: CalendarCog },
     { lavel: ' join Event', path: '/join-events', icon: CalendarCheck },
 ]
 const HeaderActionItem = () => {
