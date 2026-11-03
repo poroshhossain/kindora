@@ -1,6 +1,5 @@
-
-import React from "react";
-import { ImpactStat } from "@/types";
+import type React from "react";
+import type { ImpactStat } from "@/types";
 
 const stats: ImpactStat[] = [
   {
@@ -29,7 +28,7 @@ export const ImpactStats: React.FC = () => {
   return (
     <section className="border-b border-border bg-surface py-12 sm:py-16">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-4 sm:px-6 lg:grid-cols-4 lg:gap-8 lg:px-8">
-        {stats.map((stat, idx) => (
+        {stats.map((stat, _idx) => (
           <div
             key={stat.label}
             className="group space-y-2 text-center lg:text-left"

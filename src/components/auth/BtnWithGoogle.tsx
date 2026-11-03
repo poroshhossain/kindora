@@ -1,11 +1,11 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "../ui/button";
 import { GoogleIcon } from "./google-icon";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 
 const BtnWithGoogle = () => {
   const [loading, setLoading] = useState(false);
@@ -37,11 +37,7 @@ const BtnWithGoogle = () => {
       className="mt-4 w-full"
       disabled={loading}
     >
-      {loading ? (
-        <Loader2 className="animate-spin" />
-      ) : (
-        <GoogleIcon />
-      )}
+      {loading ? <Loader2 className="animate-spin" /> : <GoogleIcon />}
 
       {loading ? "Connecting..." : "Continue with Google"}
     </Button>

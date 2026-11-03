@@ -1,14 +1,13 @@
-
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { postJoinEvent } from "@/lib/api";
-import { authClient } from "@/lib/auth-client";
-import { EventRecord } from "@/types/types";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { postJoinEvent } from "@/lib/api";
+import { authClient } from "@/lib/auth-client";
+import type { EventRecord } from "@/types/types";
 
 interface JoinEventProps {
   event: EventRecord;
@@ -25,7 +24,7 @@ const JoinEvent = ({ event }: JoinEventProps) => {
   const handleAddToJoin = async () => {
     // Authentication check
     if (!session?.user?.email) {
-      router.push("/sign-in");
+      router.push("/login");
       return;
     }
 
@@ -34,10 +33,7 @@ const JoinEvent = ({ event }: JoinEventProps) => {
     try {
       setIsLoading(true);
 
-      const result = await postJoinEvent(
-        event._id,
-        session.user.email
-      );
+      const result = await postJoinEvent(event._id, session.user.email);
 
       if (!result.success) {
         throw new Error(result.message);
@@ -46,12 +42,9 @@ const JoinEvent = ({ event }: JoinEventProps) => {
       setIsJoined(true);
 
       toast.success("Event joined successfully!");
-
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to join event"
+        error instanceof Error ? error.message : "Failed to join event",
       );
     } finally {
       setIsLoading(false);

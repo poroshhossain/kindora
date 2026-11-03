@@ -1,11 +1,9 @@
-
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EventsSkeleton = () => {
   return (
     <section className="bg-slate-50 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
         {/* Section Heading */}
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-3">
@@ -28,7 +26,6 @@ const EventsSkeleton = () => {
               <Skeleton className="aspect-16/10 w-full rounded-none" />
 
               <div className="p-5">
-
                 {/* Title */}
                 <div className="space-y-2">
                   <Skeleton className="h-6 w-full" />
@@ -52,12 +49,10 @@ const EventsSkeleton = () => {
                 <div className="mt-6 border-t border-slate-100 pt-4">
                   <Skeleton className="h-11 w-full rounded-xl" />
                 </div>
-
               </div>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

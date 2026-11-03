@@ -1,9 +1,5 @@
-
 "use client";
 
-import { useMemo, useState } from "react";
-import { EventRecord } from "@/types/types";
-import EventCard from "./EventCard";
 import {
   CalendarDays,
   Search,
@@ -11,6 +7,9 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
+import { useMemo, useState } from "react";
+import type { EventRecord } from "@/types/types";
+import EventCard from "./EventCard";
 
 interface Props {
   events: EventRecord[];
@@ -40,15 +39,13 @@ const EventsExplorer = ({ events }: Props) => {
         (event) =>
           event.title.toLowerCase().includes(query) ||
           event.location.toLowerCase().includes(query) ||
-          event.description.toLowerCase().includes(query)
+          event.description.toLowerCase().includes(query),
       );
     }
 
     // Filter by event type
     if (activeCategory !== "All") {
-      result = result.filter(
-        (event) => event.eventType === activeCategory
-      );
+      result = result.filter((event) => event.eventType === activeCategory);
     }
 
     // Sorting
@@ -76,7 +73,6 @@ const EventsExplorer = ({ events }: Props) => {
       <div className="pointer-events-none absolute bottom-0 left-0 size-72 rounded-full bg-emerald-100/40 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
         {/* Heading */}
         <div className="mb-10">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-2 text-xs font-bold tracking-wide text-green-700">
@@ -92,8 +88,8 @@ const EventsExplorer = ({ events }: Props) => {
               </h1>
 
               <p className="mt-4 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
-                Find meaningful community activities, connect with
-                people, and make a positive impact together.
+                Find meaningful community activities, connect with people, and
+                make a positive impact together.
               </p>
             </div>
 
@@ -116,9 +112,7 @@ const EventsExplorer = ({ events }: Props) => {
 
         {/* Search & Filter Panel */}
         <div className="mb-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-
           <div className="flex flex-col gap-4 lg:flex-row">
-
             {/* Search */}
             <div className="relative flex-1">
               <Search
@@ -230,8 +224,8 @@ const EventsExplorer = ({ events }: Props) => {
             </h3>
 
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
-              We couldn't find any events matching your search.
-              Try another keyword or explore a different category.
+              We couldn't find any events matching your search. Try another
+              keyword or explore a different category.
             </p>
 
             <button

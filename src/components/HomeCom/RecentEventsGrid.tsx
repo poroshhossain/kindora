@@ -1,9 +1,8 @@
-
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
-import { SocialEvent } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
+import type { SocialEvent } from "@/types";
 
 interface Props {
   events: SocialEvent[];
@@ -77,14 +76,11 @@ export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
                     <div className="flex items-center gap-2 text-xs font-medium text-primary">
                       <CalendarDays size={15} />
                       <time dateTime={event.eventDate}>
-                        {new Date(event.eventDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }
-                        )}
+                        {new Date(event.eventDate).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
                       </time>
                     </div>
 

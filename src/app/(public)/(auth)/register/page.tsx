@@ -3,9 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
+import { toast } from "sonner";
+import type { z } from "zod";
+import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
+import { registerSchema } from "@/components/auth/zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,12 +22,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
-import { toast } from "sonner";
-import { registerSchema } from "@/components/auth/zod";
-import { useRouter } from "next/navigation";
-
-
 
 type RegisterValues = z.infer<typeof registerSchema>;
 
@@ -51,19 +48,17 @@ export default function RegisterPage() {
       });
       if (data) {
         toast.success("Account created successfully!");
-        router.replace('/')
+        router.replace("/");
       }
       if (error) {
         toast.error(error.message || "Registration failed");
         return;
       }
-
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Something went wrong. Please try again.");
     }
   });
-
 
   return (
     <div className="w-full max-w-md">

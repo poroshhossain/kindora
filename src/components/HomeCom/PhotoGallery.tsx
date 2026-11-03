@@ -1,8 +1,7 @@
-
-import React from "react";
+import { ArrowUpRight, Images } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Images } from "lucide-react";
+import type React from "react";
 
 const galleryImages = [
   {
@@ -35,7 +34,6 @@ export const PhotoGallery: React.FC = () => {
   return (
     <section className="border-b border-border bg-background px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
-
         {/* Section Header */}
         <div className="mx-auto max-w-2xl space-y-4 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary-light px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-secondary">
@@ -51,15 +49,14 @@ export const PhotoGallery: React.FC = () => {
           </h2>
 
           <p className="mx-auto max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
-            Every small act of kindness creates a lasting impact.
-            Explore moments of compassion, collaboration, and
-            positive change in our communities.
+            Every small act of kindness creates a lasting impact. Explore
+            moments of compassion, collaboration, and positive change in our
+            communities.
           </p>
         </div>
 
         {/* Gallery Grid */}
         <div className="grid auto-rows-[220px] grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:auto-rows-[200px] lg:auto-rows-[230px]">
-
           {galleryImages.map((item) => (
             <div
               key={item.title}
@@ -94,7 +91,6 @@ export const PhotoGallery: React.FC = () => {
               </div>
             </div>
           ))}
-
         </div>
 
         {/* Bottom CTA */}
@@ -111,7 +107,6 @@ export const PhotoGallery: React.FC = () => {
             <ArrowUpRight size={17} />
           </Link>
         </div>
-
       </div>
     </section>
   );

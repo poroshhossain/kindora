@@ -9,11 +9,7 @@ const passwordSchema = z
 export const registerSchema = z.object({
   name: z.string().trim().min(1, "Name is required.").max(50),
 
-  email: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .email("Enter a valid email address."),
+  email: z.string().trim().toLowerCase().email("Enter a valid email address."),
 
   photoUrl: z
     .string()
@@ -26,7 +22,6 @@ export const registerSchema = z.object({
   password: passwordSchema,
 });
 
-
 export const loginSchema = z.object({
   email: z
     .string()
@@ -35,7 +30,3 @@ export const loginSchema = z.object({
     .email("Enter a valid email address."),
   password: z.string().min(1, "Password is required."),
 });
-
-
-
-
