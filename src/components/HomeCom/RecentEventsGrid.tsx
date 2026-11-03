@@ -1,17 +1,23 @@
-import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
+
+import { getRecentEvents } from "@/lib/api";
+import { EventRecord } from "@/types/types";
+import {
+  ArrowRight,
+  CalendarDays,
+  MapPin,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type React from "react";
-import type { SocialEvent } from "@/types";
 
-interface Props {
-  events: SocialEvent[];
-}
 
-export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
+
+export const RecentEventsGrid = async() => {
+      const events:EventRecord[] = await getRecentEvents();
+
   return (
     <section className="border-b border-border bg-muted/40 px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
+
         {/* Header */}
         <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-end">
           <div className="space-y-2">
@@ -30,7 +36,7 @@ export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
           </div>
 
           <Link
-            href="/events"
+            href="/upcoming-events"
             className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-primary transition hover:gap-3"
           >
             View All Events
@@ -41,15 +47,16 @@ export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
         {/* Events Grid */}
         {events.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {events.slice(0, 6).map((event) => (
+
+            {events.map((event) => (
               <article
                 key={event._id}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
-                {/* Image */}
+                {/* Thumbnail */}
                 <div className="relative h-52 overflow-hidden bg-muted">
                   <Image
-                    src={event.image}
+                    src={event.thumbnail}
                     alt={event.title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -64,35 +71,44 @@ export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
                 {/* Content */}
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <div className="flex-1 space-y-3">
+
                     <h3 className="line-clamp-1 text-lg font-bold text-foreground transition-colors group-hover:text-primary sm:text-xl">
                       {event.title}
                     </h3>
 
+                    {/* Location */}
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <MapPin size={15} className="shrink-0 text-secondary" />
-                      <span className="line-clamp-1">{event.location}</span>
+                      <span className="line-clamp-1">
+                        {event.location}
+                      </span>
                     </div>
 
+                    {/* Event Date */}
                     <div className="flex items-center gap-2 text-xs font-medium text-primary">
                       <CalendarDays size={15} />
                       <time dateTime={event.eventDate}>
-                        {new Date(event.eventDate).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+                        {new Date(event.eventDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
                       </time>
                     </div>
 
+                    {/* Description */}
                     <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
                       {event.description}
                     </p>
                   </div>
 
-                  {/* Action */}
+                  {/* Footer */}
                   <div className="mt-6 border-t border-border pt-4">
                     <Link
-                      href={`/events/${event._id}`}
+                      href={`/upcoming-events/${event._id}`}
                       className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground"
                     >
                       View Event
@@ -102,19 +118,24 @@ export const RecentEventsGrid: React.FC<Props> = ({ events }) => {
                 </div>
               </article>
             ))}
+
           </div>
         ) : (
+          /* Empty State */
           <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
             <CalendarDays
               size={36}
               className="mx-auto mb-4 text-muted-foreground"
             />
+
             <h3 className="text-lg font-bold text-foreground">
               No Upcoming Events Yet
             </h3>
+
             <p className="mt-2 text-sm text-muted-foreground">
               New community initiatives will appear here soon.
             </p>
+
             <Link
               href="/events"
               className="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"

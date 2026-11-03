@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import Footer from "@/components/footer/Footer";
 import Navber from "@/components/header/Navber";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Loading } from "@/components/sheardData/Loading";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-screen flex-col bg-background text-foreground">
         <ThemeProvider>
-          <Suspense fallback={<p>Lodding...</p>}>
+          <Suspense fallback={<Loading />}>
             <Navber />
           </Suspense>
           <main className="flex-1">{children}</main>
