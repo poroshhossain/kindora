@@ -1,13 +1,9 @@
-
-import { EventRecord } from "@/types/types";
-import EventsExplorer from "./EventsExplorer";
 import { getEventsApi } from "@/lib/api";
+import type { EventRecord } from "@/types/types";
+import EventsExplorer from "./EventsExplorer";
 
 const Events = async () => {
-
-
   const eventsData: EventRecord[] = await getEventsApi();
-
 
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Dhaka",
@@ -29,10 +25,8 @@ const Events = async () => {
     })
     .sort(
       (a, b) =>
-        new Date(a.eventDate).getTime() -
-        new Date(b.eventDate).getTime()
+        new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime(),
     );
-
 
   return <EventsExplorer events={upcomingEvents} />;
 };

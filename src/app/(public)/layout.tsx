@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Suspense } from "react";
 import Footer from "@/components/footer/Footer";
 import Navber from "@/components/header/Navber";
-import { Suspense } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
@@ -31,12 +31,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-screen flex-col bg-background text-foreground">
         <ThemeProvider>
-            <Suspense fallback={<p>Lodding...</p>}>
-              <Navber />
-            </Suspense>
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Toaster richColors position="top-center" theme="system" />
+          <Suspense fallback={<p>Lodding...</p>}>
+            <Navber />
+          </Suspense>
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Toaster richColors position="top-center" theme="system" />
         </ThemeProvider>
       </body>
     </html>

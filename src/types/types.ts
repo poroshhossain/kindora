@@ -1,4 +1,3 @@
-
 export interface EventRecord {
   _id: string;
   title: string;

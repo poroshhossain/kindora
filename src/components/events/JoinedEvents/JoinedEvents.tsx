@@ -1,21 +1,20 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
-import { EventRecord } from "@/types/types";
-import { API_BASE_URL } from "@/lib/api";
-import Link from "next/link";
-import Image from "next/image";
 import {
-  CalendarDays,
-  MapPin,
   ArrowUpRight,
-  Ticket,
-  Sparkles,
   CalendarCheck,
+  CalendarDays,
   Compass,
+  MapPin,
+  Sparkles,
+  Ticket,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
+import type { EventRecord } from "@/types/types";
 
 const JoinedEvents = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -40,8 +39,8 @@ const JoinedEvents = () => {
 
         const response = await fetch(
           `${API_BASE_URL}/joined-events?userEmail=${encodeURIComponent(
-            session.user.email
-          )}`
+            session.user.email,
+          )}`,
         );
 
         const result = await response.json();
@@ -53,9 +52,7 @@ const JoinedEvents = () => {
         setEvents(result.data);
       } catch (error) {
         setError(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong"
+          error instanceof Error ? error.message : "Something went wrong",
         );
       } finally {
         setLoading(false);
@@ -108,7 +105,7 @@ const JoinedEvents = () => {
           </p>
 
           <Link
-            href="/sign-in"
+            href="/login"
             className="mt-7 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground transition hover:opacity-90"
           >
             Sign In <ArrowUpRight size={18} />
@@ -121,7 +118,6 @@ const JoinedEvents = () => {
   return (
     <main className="min-h-screen bg-background">
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-
         {/* Header */}
         <div className="relative mb-10 overflow-hidden rounded-3xl border border-border bg-surface p-6 sm:p-10">
           <div className="pointer-events-none absolute -right-10 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" />
@@ -136,14 +132,12 @@ const JoinedEvents = () => {
 
               <h1 className="max-w-xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
                 Experiences worth
-                <span className="block text-primary">
-                  looking forward to.
-                </span>
+                <span className="block text-primary">looking forward to.</span>
               </h1>
 
               <p className="mt-4 max-w-lg text-sm leading-6 text-muted-foreground sm:text-base">
-                All your joined events, gathered in one place.
-                Your next experience starts here.
+                All your joined events, gathered in one place. Your next
+                experience starts here.
               </p>
             </div>
 
@@ -220,8 +214,8 @@ const JoinedEvents = () => {
             </h3>
 
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-              You haven't joined any events yet. Discover something
-              interesting and make your first event memorable.
+              You haven't joined any events yet. Discover something interesting
+              and make your first event memorable.
             </p>
 
             <Link
@@ -262,10 +256,11 @@ const JoinedEvents = () => {
                     </span>
 
                     <span className="absolute bottom-4 right-4 text-xs font-medium text-white/90">
-                      {new Date(event.eventDate).toLocaleDateString(
-                        "en-US",
-                        { month: "short", day: "numeric", year: "numeric" }
-                      )}
+                      {new Date(event.eventDate).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
                     </span>
                   </div>
 
@@ -290,7 +285,7 @@ const JoinedEvents = () => {
                         <p className="mt-2 text-xs font-semibold text-foreground">
                           {new Date(event.eventDate).toLocaleDateString(
                             "en-US",
-                            { month: "short", day: "numeric" }
+                            { month: "short", day: "numeric" },
                           )}
                         </p>
                       </div>

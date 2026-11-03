@@ -1,6 +1,5 @@
-
-import React from "react";
 import { ArrowRight, Mail, Sparkles } from "lucide-react";
+import type React from "react";
 
 export const NewsletterCTA: React.FC = () => {
   return (
@@ -31,10 +30,7 @@ export const NewsletterCTA: React.FC = () => {
           </p>
 
           {/* Newsletter Form */}
-          <form
-           
-            className="mx-auto flex max-w-xl flex-col gap-3 pt-2 sm:flex-row"
-          >
+          <form className="mx-auto flex max-w-xl flex-col gap-3 pt-2 sm:flex-row">
             <div className="flex flex-1 items-center gap-3 rounded-xl border border-border bg-background px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
               <Mail size={19} className="shrink-0 text-muted-foreground" />
 

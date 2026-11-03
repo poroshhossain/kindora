@@ -1,21 +1,15 @@
-
-import { EventRecord } from "@/types/types";
+import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  CalendarDays,
-  MapPin,
-} from "lucide-react";
+import type { EventRecord } from "@/types/types";
 
 interface EventCardProps {
   event: EventRecord;
 }
 
 const EventCard = ({ event }: EventCardProps) => {
-
   const formattedDate = new Date(
-    `${event.eventDate}T00:00:00`
+    `${event.eventDate}T00:00:00`,
   ).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -24,10 +18,8 @@ const EventCard = ({ event }: EventCardProps) => {
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/5">
-
       {/* Thumbnail */}
       <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
-
         <Image
           src={event.thumbnail}
           alt={event.title}
@@ -46,7 +38,6 @@ const EventCard = ({ event }: EventCardProps) => {
 
       {/* Card Content */}
       <div className="p-5">
-
         {/* Event Title */}
         <h3 className="line-clamp-2 min-h-14 text-lg font-bold leading-7 text-slate-900 transition-colors group-hover:text-green-700">
           {event.title}
@@ -54,7 +45,6 @@ const EventCard = ({ event }: EventCardProps) => {
 
         {/* Event Information */}
         <div className="mt-4 space-y-3">
-
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <CalendarDays size={17} className="shrink-0 text-green-700" />
             <span>{formattedDate}</span>
@@ -64,7 +54,6 @@ const EventCard = ({ event }: EventCardProps) => {
             <MapPin size={17} className="shrink-0 text-green-700" />
             <span className="line-clamp-1">{event.location}</span>
           </div>
-
         </div>
 
         {/* View Event Button */}
@@ -77,7 +66,6 @@ const EventCard = ({ event }: EventCardProps) => {
             <ArrowUpRight size={17} />
           </Link>
         </div>
-
       </div>
     </article>
   );

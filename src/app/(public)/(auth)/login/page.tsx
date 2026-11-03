@@ -3,10 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
+import { toast } from "sonner";
+import type { z } from "zod";
+import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
+import { loginSchema } from "@/components/auth/zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,13 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import BtnWithGoogle from "@/components/auth/BtnWithGoogle";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { loginSchema } from "@/components/auth/zod";
-
-
 
 type LoginValues = z.infer<typeof loginSchema>;
 
@@ -62,15 +59,11 @@ export default function LoginPage() {
         toast.error(error.message || "Login failed");
         return;
       }
-
-
-
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Something went wrong. Please try again.");
     }
   });
-
 
   return (
     <div className="w-full max-w-md">

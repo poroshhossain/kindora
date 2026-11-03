@@ -1,14 +1,13 @@
-
-import React from "react";
-import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
   CalendarDays,
+  HeartHandshake,
   MapPin,
   Users,
-  HeartHandshake,
-  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
+import type React from "react";
 
 const features = [
   {
@@ -61,7 +60,6 @@ export const BentoFeatures: React.FC = () => {
   return (
     <section className="border-b border-border bg-background px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
-
         {/* Section Heading */}
         <div className="mx-auto mb-14 max-w-2xl space-y-4 text-center">
           <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
@@ -76,8 +74,8 @@ export const BentoFeatures: React.FC = () => {
           </h2>
 
           <p className="text-sm leading-7 text-muted-foreground sm:text-base">
-            Everything you need to discover opportunities, organize
-            initiatives, and make a positive difference in your community.
+            Everything you need to discover opportunities, organize initiatives,
+            and make a positive difference in your community.
           </p>
         </div>
 
@@ -95,9 +93,10 @@ export const BentoFeatures: React.FC = () => {
                 <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/5 blur-3xl transition-colors group-hover:bg-primary/10" />
 
                 <div className="relative space-y-6">
-
                   {/* Icon */}
-                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${feature.iconBg}`}>
+                  <div
+                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${feature.iconBg}`}
+                  >
                     <Icon size={27} strokeWidth={1.8} />
                   </div>
 
@@ -147,7 +146,6 @@ export const BentoFeatures: React.FC = () => {
             <ArrowRight size={17} />
           </Link>
         </div>
-
       </div>
     </section>
   );

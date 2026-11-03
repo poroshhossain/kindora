@@ -1,20 +1,10 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CalendarDays,
-  CalendarPlus,
-  Loader2,
-  MapPin,
-} from "lucide-react";
+import { CalendarDays, CalendarPlus, Loader2, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  Controller,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -36,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { API_BASE_URL, postEventApi } from "@/lib/api";
+import { postEventApi } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
 
 // ----------------------------------
@@ -66,7 +56,7 @@ const EVENT_TYPE_LABELS: Record<EventType, string> = {
 };
 
 const eventTypeItems = Object.fromEntries(
-  EVENT_TYPES.map((type) => [type, EVENT_TYPE_LABELS[type]])
+  EVENT_TYPES.map((type) => [type, EVENT_TYPE_LABELS[type]]),
 ) as Record<EventType, string>;
 
 // ----------------------------------
@@ -83,8 +73,7 @@ const isValidDate = (value: string) => {
   const date = new Date(`${value}T00:00:00.000Z`);
 
   return (
-    !Number.isNaN(date.getTime()) &&
-    date.toISOString().slice(0, 10) === value
+    !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value
   );
 };
 
@@ -109,10 +98,7 @@ const createEventSchema = z.object({
     .min(1, "Description is required.")
     .max(2000, "Maximum 2000 characters allowed."),
 
-  thumbnail: z
-    .string()
-    .trim()
-    .url("Please enter a valid image URL."),
+  thumbnail: z.string().trim().url("Please enter a valid image URL."),
 
   date: z
     .string()
@@ -120,7 +106,7 @@ const createEventSchema = z.object({
     .refine(isValidDate, "Please enter a valid date.")
     .refine(
       (date) => date > getTodayDate(),
-      "Event date must be in the future."
+      "Event date must be in the future.",
     ),
 
   location: z
@@ -187,7 +173,7 @@ export default function CreateEventForm() {
   // 6. Submit Handler
   // ----------------------------------
 
-  const {data:session} = authClient.useSession();
+  const { data: session } = authClient.useSession();
   const onSubmit = async (values: CreateEventValues) => {
     try {
       const eventData = {
@@ -197,7 +183,7 @@ export default function CreateEventForm() {
         thumbnail: values.thumbnail,
         location: values.location,
         eventDate: values.date,
-        createdBy:session?.user?.email
+        createdBy: session?.user?.email,
       };
 
       await postEventApi(eventData);
@@ -206,14 +192,11 @@ export default function CreateEventForm() {
 
       router.push("/upcoming-events");
       router.refresh();
-
     } catch (error) {
       console.error("Create event error:", error);
 
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to create event."
+        error instanceof Error ? error.message : "Failed to create event.",
       );
     }
   };
@@ -225,7 +208,6 @@ export default function CreateEventForm() {
   return (
     <section className="min-h-screen bg-background px-4 py-10 sm:py-14">
       <div className="mx-auto max-w-2xl">
-
         {/* Page Heading */}
         <div className="mb-8 text-center">
           <span className="mb-3 inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
@@ -237,38 +219,31 @@ export default function CreateEventForm() {
           </h1>
 
           <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-muted-foreground sm:text-base">
-            Bring people together and make a positive impact.
-            Share your initiative with the community.
+            Bring people together and make a positive impact. Share your
+            initiative with the community.
           </p>
         </div>
 
         {/* Form Card */}
         <Card className="border-border/70 shadow-sm">
-
           <CardHeader className="border-b border-border/70 pb-5">
-            <CardTitle className="text-lg">
-              Event Information
-            </CardTitle>
+            <CardTitle className="text-lg">Event Information</CardTitle>
 
             <CardDescription>
-              Fill in the details below to publish your community event.
-              All fields are required.
+              Fill in the details below to publish your community event. All
+              fields are required.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="pt-6">
-
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-6"
               noValidate
             >
-
               {/* Event Title */}
               <div className="space-y-2">
-                <Label htmlFor="title">
-                  Event Title *
-                </Label>
+                <Label htmlFor="title">Event Title *</Label>
 
                 <Input
                   id="title"
@@ -283,9 +258,7 @@ export default function CreateEventForm() {
 
               {/* Event Type */}
               <div className="space-y-2">
-                <Label htmlFor="type">
-                  Event Type *
-                </Label>
+                <Label htmlFor="type">Event Type *</Label>
 
                 <Controller
                   control={control}
@@ -322,11 +295,8 @@ export default function CreateEventForm() {
 
               {/* Description */}
               <div className="space-y-2">
-
                 <div className="flex items-center justify-between gap-2">
-                  <Label htmlFor="description">
-                    Description *
-                  </Label>
+                  <Label htmlFor="description">Description *</Label>
 
                   <span className="text-xs tabular-nums text-muted-foreground">
                     {description?.length ?? 0}/2000
@@ -347,9 +317,7 @@ export default function CreateEventForm() {
 
               {/* Thumbnail */}
               <div className="space-y-2">
-                <Label htmlFor="thumbnail">
-                  Thumbnail Image URL *
-                </Label>
+                <Label htmlFor="thumbnail">Thumbnail Image URL *</Label>
 
                 <Input
                   id="thumbnail"
@@ -364,7 +332,6 @@ export default function CreateEventForm() {
 
               {/* Date & Location */}
               <div className="space-y-4">
-
                 <div className="border-t pt-5">
                   <h3 className="flex items-center gap-2 text-sm font-semibold">
                     <CalendarDays className="size-4 text-primary" />
@@ -377,12 +344,9 @@ export default function CreateEventForm() {
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-
                   {/* Event Date */}
                   <div className="space-y-2">
-                    <Label htmlFor="date">
-                      Event Date *
-                    </Label>
+                    <Label htmlFor="date">Event Date *</Label>
 
                     <Input
                       id="date"
@@ -402,9 +366,7 @@ export default function CreateEventForm() {
 
                   {/* Location */}
                   <div className="space-y-2">
-                    <Label htmlFor="location">
-                      Location *
-                    </Label>
+                    <Label htmlFor="location">Location *</Label>
 
                     <div className="relative">
                       <MapPin className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -421,13 +383,11 @@ export default function CreateEventForm() {
 
                     <FieldError message={errors.location?.message} />
                   </div>
-
                 </div>
               </div>
 
               {/* Submit Button */}
               <div className="border-t pt-5">
-
                 <Button
                   type="submit"
                   size="lg"
@@ -450,9 +410,7 @@ export default function CreateEventForm() {
                 <p className="mt-3 text-center text-xs text-muted-foreground">
                   Please review your event details before publishing.
                 </p>
-
               </div>
-
             </form>
           </CardContent>
         </Card>
@@ -461,7 +419,6 @@ export default function CreateEventForm() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Together, we can make a difference in our community.
         </p>
-
       </div>
     </section>
   );

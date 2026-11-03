@@ -1,13 +1,11 @@
-
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, CalendarDays, MapPin, Sparkles } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
 
 export const HeroSection: React.FC = () => {
   return (
     <section className="relative overflow-hidden border-b border-border bg-background py-20 sm:py-24 lg:py-28">
-
       {/* Background Decorations */}
       <div
         aria-hidden="true"
@@ -20,10 +18,8 @@ export const HeroSection: React.FC = () => {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-10">
-
           {/* Left Content */}
           <div className="space-y-7 text-center lg:col-span-7 lg:text-left">
-
             {/* Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary-light px-4 py-2 text-xs font-semibold tracking-wide text-secondary">
               <span className="relative flex h-2 w-2">
@@ -45,14 +41,13 @@ export const HeroSection: React.FC = () => {
 
             {/* Description */}
             <p className="mx-auto max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg lg:mx-0">
-              Create, discover, and join impactful social service campaigns
-              in your local area. From winter clothing distribution to
-              neighborhood tree plantations — make real change together.
+              Create, discover, and join impactful social service campaigns in
+              your local area. From winter clothing distribution to neighborhood
+              tree plantations — make real change together.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col justify-center gap-4 pt-2 sm:flex-row lg:justify-start">
-
               <Link
                 href="/events"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90"
@@ -71,7 +66,6 @@ export const HeroSection: React.FC = () => {
                 <CalendarDays size={18} className="text-secondary" />
                 Host an Event
               </Link>
-
             </div>
 
             {/* Trust Indicators */}
@@ -90,14 +84,12 @@ export const HeroSection: React.FC = () => {
           {/* Right Featured Event */}
           <div className="lg:col-span-5">
             <div className="relative mx-auto max-w-lg">
-
               {/* Decorative Shape */}
               <div className="absolute -right-4 -top-4 h-28 w-28 rounded-2xl bg-secondary/10" />
               <div className="absolute -bottom-4 -left-4 h-28 w-28 rounded-2xl bg-primary/10" />
 
               {/* Event Card */}
               <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-2 shadow-2xl shadow-primary/10">
-
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden rounded-xl sm:h-80">
                   <Image
@@ -136,11 +128,9 @@ export const HeroSection: React.FC = () => {
                     Join Event
                   </Link>
                 </div>
-
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

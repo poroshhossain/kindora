@@ -1,8 +1,6 @@
-
+import { Suspense } from "react";
 import EventDetailsContent from "@/components/events/EventDetailsContent/EventDetailsContent";
 import EventDetailsSkeleton from "@/components/events/EventDetailsContent/EventDetailsSkeleton";
-import { Suspense } from "react";
-
 
 interface Props {
   params: Promise<{ id: string }>;
