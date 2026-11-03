@@ -1,6 +1,6 @@
 
 import { API_BASE_URL } from "@/lib/api";
-import { EventRecord } from "@/lib/types";
+import { EventRecord } from "@/types/types";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";

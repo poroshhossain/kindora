@@ -2,7 +2,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { EventRecord } from "@/lib/types";
+import { EventRecord } from "@/types/types";
 import EventCard from "./EventCard";
 import {
   CalendarDays,

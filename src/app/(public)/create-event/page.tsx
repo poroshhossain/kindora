@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { API_BASE_URL, postEventApi } from "@/lib/api";
+import { authClient } from "@/lib/auth-client";
 
 // ----------------------------------
 // 1. Event Constants
@@ -186,6 +187,7 @@ export default function CreateEventForm() {
   // 6. Submit Handler
   // ----------------------------------
 
+  const {data:session} = authClient.useSession();
   const onSubmit = async (values: CreateEventValues) => {
     try {
       const eventData = {
@@ -195,6 +197,7 @@ export default function CreateEventForm() {
         thumbnail: values.thumbnail,
         location: values.location,
         eventDate: values.date,
+        createdBy:session?.user?.email
       };
 
       await postEventApi(eventData);

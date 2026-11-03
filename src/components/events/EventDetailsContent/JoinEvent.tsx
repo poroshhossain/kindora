@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { postJoinEvent } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
-import { EventRecord } from "@/lib/types";
+import { EventRecord } from "@/types/types";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

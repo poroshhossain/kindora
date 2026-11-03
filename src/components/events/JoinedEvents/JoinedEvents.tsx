@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { EventRecord } from "@/lib/types";
+import { EventRecord } from "@/types/types";
 import { API_BASE_URL } from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";

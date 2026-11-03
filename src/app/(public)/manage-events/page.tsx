@@ -1,10 +1,13 @@
-"use client"
+
+import ManageEvents from "@/components/events/manageEvents/ManageEvents"
 
 
 const ManageEventPage = () => {
 
   return (
-    <div>ManageEventPage</div>
+    <>
+      <ManageEvents />
+    </>
   )
 }
 export default ManageEventPage

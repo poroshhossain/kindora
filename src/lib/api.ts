@@ -1,6 +1,8 @@
 import { toast } from "sonner";
+import { EventRecord } from "../types/types";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
 
 // Join Events Api
@@ -49,7 +51,7 @@ export const getEventsApi = async () => {
     }
 }
 
-export const postEventApi = async (eventData: any) => {
+export const postEventApi = async (eventData: EventRecord) => {
     const response = await fetch(`${API_BASE_URL}/events`, {
         method: "POST",
         headers: {

@@ -1,5 +1,5 @@
 
-import { EventRecord } from "@/lib/types";
+import { EventRecord } from "@/types/types";
 import EventsExplorer from "./EventsExplorer";
 import { getEventsApi } from "@/lib/api";
 
