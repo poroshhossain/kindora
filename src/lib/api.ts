@@ -68,3 +68,59 @@ export const postEventApi = async (eventData: EventRecord) => {
 
     return result;
 };
+
+export interface UpdateEventData {
+    title: string;
+    description: string;
+    eventType: string;
+    thumbnail: string;
+    location: string;
+    eventDate: string;
+}
+
+export const updateEventApi = async (
+    id: string,
+    userEmail: string,
+    data: UpdateEventData
+) => {
+    const response = await fetch(`${API_BASE_URL}/events/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userEmail,
+            data,
+        }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || "Failed to update event.");
+    }
+
+    return result;
+};
+
+
+export const deleteEventApi = async (
+  id: string,
+  userEmail: string
+) => {
+  const response = await fetch(`${API_BASE_URL}/events/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userEmail }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Failed to delete event.");
+  }
+
+  return result;
+};

@@ -1,6 +1,6 @@
 
 export interface EventRecord {
-  _id?: string;
+  _id: string;
   title: string;
   description: string;
   eventType: string;

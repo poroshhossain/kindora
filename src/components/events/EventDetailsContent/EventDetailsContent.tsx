@@ -102,7 +102,7 @@ const EventDetailsContent = async ({
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Hero Image */}
                 <section className="relative mt-6 overflow-hidden rounded-3xl bg-muted shadow-sm sm:mt-10">
-                    <div className="relative aspect-[16/11] sm:aspect-[21/9]">
+                    <div className="relative aspect-16/11 sm:aspect-21/9">
                         <Image
                             src={event.thumbnail}
                             alt={event.title}
@@ -113,7 +113,7 @@ const EventDetailsContent = async ({
                         />
 
                         {/* Image Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/5" />
+                        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/30 to-slate-950/5" />
 
                         {/* Category Badge */}
                         <div className="absolute left-5 top-5 sm:left-8 sm:top-8">
@@ -272,7 +272,7 @@ const EventDetailsContent = async ({
                                                 Location
                                             </p>
 
-                                            <p className="mt-1 break-words text-sm font-semibold leading-6 text-foreground">
+                                            <p className="mt-1 wrap-break-word text-sm font-semibold leading-6 text-foreground">
                                                 {event.location}
                                             </p>
                                         </div>
