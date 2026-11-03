@@ -33,25 +33,21 @@ export const postJoinEvent = async (id: string, email: string | null | undefined
 }
 
 
+// Uncached data fetch for server components.
+// Do NOT wrap this in try/catch: while prerendering, Next.js rejects the fetch
+// with HANGING_PROMISE_REJECTION to bail out of the static pass, and React
+// must observe it to defer rendering to request time.
 export const getEventsApi = async () => {
+    const res = await fetch(`${API_BASE_URL}/events`);
 
-    try {
-        const res = await fetch(`${API_BASE_URL}/events`, {
-            cache: "no-store",
-        });
-
-        if (!res.ok) {
-            throw new Error("Failed to fetch events");
-        }
-
-        const data = await res.json();
-        return data
-    } catch (error) {
-        console.error("Events fetching error:", error);
+    if (!res.ok) {
+        throw new Error("Failed to fetch events");
     }
+
+    return res.json();
 }
 
-export const postEventApi = async (eventData: EventRecord) => {
+export const postEventApi = async (eventData: Omit<EventRecord, "_id">) => {
     const response = await fetch(`${API_BASE_URL}/events`, {
         method: "POST",
         headers: {
