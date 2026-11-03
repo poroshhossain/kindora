@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Class-based dark mode (next-themes toggles .dark on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Reserve the scrollbar gutter symmetrically so navigating between short pages
+   (no scrollbar) and long pages (scrollbar) never shifts the layout sideways,
+   and mx-auto containers center within the physical window, not the narrow
+   scrollport. (MDN's sanctioned pattern for scrollbar-centered layouts.) */
+@layer base {
+  html {
+    scrollbar-gutter: stable both-edges;
+  }
+}
+
+:root {
+  /* Brand */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #16a34a;
+  --secondary-foreground: #ffffff;
+
+  /* Background */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --muted: #f1f5f9;
+
+  /* Text */
+  --text: #0f172a;
+  --text-muted: #64748b;
+
+  /* Borders */
+  --border: #e2e8f0;
+
+  /* Soft brand backgrounds */
+  --primary-light: #eff6ff;
+  --secondary-light: #dcfce7;
+
+  /* Non-brand destructive + soft destructive backgrounds */
+  --destructive: #dc2626;
+
+  /* Radius scale (used by shadcn component sizes) */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+}
+
+/* Bridge the palette above into Tailwind color utilities (bg-*, text-*, border-*, ring-*) */
+@theme {
+  --font-sans: var(--font-geist-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--text);
+  --color-surface: var(--surface);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-light: var(--secondary-light);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--text-muted);
+
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--text);
+
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+
+  /* Only non-brand color kept — required by shadcn destructive (logout/delete) styling */
+  --color-destructive: var(--destructive);
+}
+
+/* Dark palette — slate night with the same blue/green brand accents */
+.dark {
+  --primary: #60a5fa;
+  --primary-foreground: #0b1220;
+  --secondary: #22c55e;
+  --secondary-foreground: #052e16;
+
+  --background: #020617;
+  --surface: #0f172a;
+  --muted: #1e293b;
+
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+
+  --border: #1e293b;
+
+  --primary-light: #172554;
+  --secondary-light: #052e16;
+
+  --destructive: #f87171;
+}
