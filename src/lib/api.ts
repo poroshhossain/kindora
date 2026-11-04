@@ -114,3 +114,26 @@ export const deleteEventApi = async (id: string, userEmail: string) => {
 
   return result;
 };
+
+
+
+
+export const getRecentEvents = async (): Promise<EventRecord[]> => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/recent-events`);
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch recent events");
+    }
+
+    return await res.json();
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      console.log("Request was aborted");
+      return [];
+    }
+
+    console.error("Recent Events Error:", error);
+    return [];
+  }
+};
