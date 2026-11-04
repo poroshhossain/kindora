@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
 import type { EventRecord } from "@/types/types";
+import LeaveEventBtn from "@/components/sheardData/LeaveEventBtn";
 
 const JoinedEvents = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -303,16 +304,20 @@ const JoinedEvents = () => {
                       </div>
                     </div>
 
-                    <Link
-                      href={`/upcoming-events/${event._id}`}
-                      className="flex w-full items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                    >
-                      View Event Details
-                      <ArrowUpRight
-                        size={18}
-                        className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      />
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/upcoming-events/${event._id}`}
+                        className="group flex flex-1 items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-bold text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        <span>View Details</span>
+                        <ArrowUpRight
+                          size={18}
+                          className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        />
+                      </Link>
+
+                      <LeaveEventBtn  eventId={event._id}/>
+                    </div>
                   </div>
                 </article>
               ))}

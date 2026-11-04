@@ -100,7 +100,7 @@ export const PhotoGallery: React.FC = () => {
           </p>
 
           <Link
-            href="/events"
+            href="/upcoming-events"
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all hover:-translate-y-0.5 hover:opacity-90"
           >
             Explore Community Events

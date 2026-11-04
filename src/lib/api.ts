@@ -1,7 +1,44 @@
 import { toast } from "sonner";
 import type { EventRecord } from "../types/types";
+import { authClient } from "./auth-client";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+export interface UpdateEventData {
+  title: string;
+  description: string;
+  eventType: string;
+  thumbnail: string;
+  location: string;
+  eventDate: string;
+}
+
+
+
+export const getTokenClient = async () => {
+  const { data, error } = await authClient.token();
+
+  if (error || !data?.token) {
+    throw new Error("Unauthorized");
+  }
+
+  return data.token;
+};
+
+export const getLeaveEvent = async (id: string) => {
+  const token = await getTokenClient();
+
+  const res = await fetch(`${API_BASE_URL}/events/${id}/join`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  );
+
+  const data = await res.json();
+
+  return data
+};
 
 // Join Events Api
 export const postJoinEvent = async (
@@ -9,10 +46,13 @@ export const postJoinEvent = async (
   email: string | null | undefined,
 ) => {
   try {
+    const token = await getTokenClient();
     const res = await fetch(`${API_BASE_URL}/events/${id}/join`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+
       },
       body: JSON.stringify({
         userEmail: email,
@@ -31,10 +71,7 @@ export const postJoinEvent = async (
   }
 };
 
-// Uncached data fetch for server components.
-// Do NOT wrap this in try/catch: while prerendering, Next.js rejects the fetch
-// with HANGING_PROMISE_REJECTION to bail out of the static pass, and React
-// must observe it to defer rendering to request time.
+
 export const getEventsApi = async () => {
   const res = await fetch(`${API_BASE_URL}/events`);
 
@@ -46,10 +83,12 @@ export const getEventsApi = async () => {
 };
 
 export const postEventApi = async (eventData: Omit<EventRecord, "_id">) => {
+  const token = await getTokenClient();
   const response = await fetch(`${API_BASE_URL}/events`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(eventData),
   });
@@ -63,24 +102,19 @@ export const postEventApi = async (eventData: Omit<EventRecord, "_id">) => {
   return result;
 };
 
-export interface UpdateEventData {
-  title: string;
-  description: string;
-  eventType: string;
-  thumbnail: string;
-  location: string;
-  eventDate: string;
-}
+
 
 export const updateEventApi = async (
   id: string,
   userEmail: string,
   data: UpdateEventData,
 ) => {
+  const token = await getTokenClient();
   const response = await fetch(`${API_BASE_URL}/events/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({
       userEmail,
@@ -98,10 +132,12 @@ export const updateEventApi = async (
 };
 
 export const deleteEventApi = async (id: string, userEmail: string) => {
+  const token = await getTokenClient();
   const response = await fetch(`${API_BASE_URL}/events/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ userEmail }),
   });

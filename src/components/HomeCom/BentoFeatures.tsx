@@ -17,7 +17,7 @@ const features = [
       "Find meaningful social initiatives happening in your community. Explore cleanup drives, tree plantations, donation campaigns, and more.",
     icon: MapPin,
     tag: "Explore Opportunities",
-    href: "/events",
+    href: "/upcoming-events",
     size: "lg:col-span-7",
     iconBg: "bg-primary-light text-primary",
   },
@@ -39,7 +39,7 @@ const features = [
       "Be part of something bigger. Join upcoming events, connect with passionate people, and contribute your time to causes that matter.",
     icon: HeartHandshake,
     tag: "Become a Volunteer",
-    href: "/events",
+    href: "/upcoming-events",
     size: "lg:col-span-5",
     iconBg: "bg-secondary-light text-secondary",
   },
@@ -50,7 +50,7 @@ const features = [
       "Keep everything organized in one place. Track events you've created, review your joined campaigns, and manage your community involvement.",
     icon: Users,
     tag: "Visit Dashboard",
-    href: "/dashboard",
+    href: "/manage-events",
     size: "lg:col-span-7",
     iconBg: "bg-primary-light text-primary",
   },
@@ -139,7 +139,7 @@ export const BentoFeatures: React.FC = () => {
           </div>
 
           <Link
-            href="/events"
+            href="/upcoming-events"
             className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all hover:-translate-y-0.5 hover:opacity-90"
           >
             Explore Events

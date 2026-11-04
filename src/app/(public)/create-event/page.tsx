@@ -150,6 +150,7 @@ export default function CreateEventForm() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CreateEventValues>({
     resolver: zodResolver(createEventSchema),
@@ -188,10 +189,9 @@ export default function CreateEventForm() {
 
       await postEventApi(eventData);
 
+      reset();
       toast.success("Event created successfully!");
-
       router.push("/upcoming-events");
-      router.refresh();
     } catch (error) {
       console.error("Create event error:", error);
 

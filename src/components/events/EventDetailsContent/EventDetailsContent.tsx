@@ -13,6 +13,9 @@ import { notFound } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
 import type { EventRecord } from "@/types/types";
 import JoinEvent from "./JoinEvent";
+import { authClient } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 interface EventDetailsPageProps {
   params: Promise<{
@@ -23,17 +26,16 @@ interface EventDetailsPageProps {
 const formatEventDate = (date: string) => {
   if (!date) return "Date unavailable";
 
-  const datePart = date.slice(0, 10);
-  const parsedDate = new Date(`${datePart}T12:00:00+06:00`);
+  const parsedDate = new Date(date);
 
   if (Number.isNaN(parsedDate.getTime())) {
     return "Date unavailable";
   }
 
   return new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
     year: "numeric",
     timeZone: "Asia/Dhaka",
   }).format(parsedDate);
