@@ -46,15 +46,8 @@ const EventDetailsContent = async ({ params }: EventDetailsPageProps) => {
 
   let event: EventRecord;
 
-  const jwtToken = await auth.api.getToken({
-    headers: await headers()
-  })
-  console.log(jwtToken?.token)
   try {
     const response = await fetch(`${API_BASE_URL}/events/${id}`, {
-      headers:{
-        Authorization:`Bearer ${jwtToken?.token}`
-      },
       cache: "no-store",
     });
 
