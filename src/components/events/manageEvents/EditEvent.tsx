@@ -1,9 +1,14 @@
+
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarDays, Image, Loader2, MapPin, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,14 +29,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { type UpdateEventData, updateEventApi } from "@/lib/api";
+
+import { updateEventApi } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
 import type { EventRecord } from "@/types/types";
 
-interface EditEventProp {
-  event: EventRecord;
-  onUpdated?: (updatedEvent: EventRecord) => void;
-}
+// ----------------------------------
+// 1. Event Constants
+// ----------------------------------
 
 const EVENT_TYPES = [
   "cleanup",
@@ -41,9 +46,11 @@ const EVENT_TYPES = [
   "blood-donation",
   "awareness-campaign",
   "other",
-];
+] as const;
 
-const EVENT_TYPE_LABELS: Record<string, string> = {
+type EventType = (typeof EVENT_TYPES)[number];
+
+const EVENT_TYPE_LABELS: Record<EventType, string> = {
   cleanup: "Cleanup",
   plantation: "Plantation",
   donation: "Donation",
@@ -53,96 +60,178 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-const EditEvent = ({ event, onUpdated }: EditEventProp) => {
-  const router = useRouter();
+// ----------------------------------
+// 2. Date Helper
+// ----------------------------------
 
-  const { data: session, isPending } = authClient.useSession();
+const getTodayDate = () => {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dhaka",
+  }).format(new Date());
+};
 
-  const [open, setOpen] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+const isValidDate = (value: string) => {
+  const date = new Date(`${value}T00:00:00.000Z`);
 
-  const [formData, setFormData] = useState<UpdateEventData>({
-    title: event.title,
-    description: event.description,
-    eventType: event.eventType,
-    thumbnail: event.thumbnail,
-    location: event.location,
-    eventDate: event.eventDate,
+  return (
+    !Number.isNaN(date.getTime()) &&
+    date.toISOString().slice(0, 10) === value
+  );
+};
+
+// ----------------------------------
+// 3. Zod Validation
+// ----------------------------------
+
+const getEditEventSchema = (originalDate: string) =>
+  z.object({
+    title: z
+      .string()
+      .trim()
+      .min(1, "Event title is required.")
+      .max(120, "Maximum 120 characters allowed."),
+
+    eventType: z.enum(EVENT_TYPES, {
+      message: "Please select an event type.",
+    }),
+
+    description: z
+      .string()
+      .trim()
+      .min(1, "Description is required.")
+      .max(2000, "Maximum 2000 characters allowed."),
+
+    thumbnail: z.string().trim().url("Please enter a valid image URL."),
+
+    eventDate: z
+      .string()
+      .min(1, "Event date is required.")
+      .refine(isValidDate, "Please enter a valid date.")
+      .refine(
+        (date) => date >= getTodayDate() || date === originalDate,
+        "Event date must be today or in the future.",
+      ),
+
+    location: z
+      .string()
+      .trim()
+      .min(1, "Location is required.")
+      .max(160, "Maximum 160 characters allowed."),
   });
 
-  // Update form values when event changes
-  useEffect(() => {
-    setFormData({
+type EditEventValues = z.infer<ReturnType<typeof getEditEventSchema>>;
+
+// ----------------------------------
+// 4. Reusable Error Component
+// ----------------------------------
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+
+  return (
+    <p role="alert" className="text-xs font-medium text-destructive">
+      {message}
+    </p>
+  );
+}
+
+// ----------------------------------
+// 5. Edit Event Component
+// ----------------------------------
+
+interface EditEventProp {
+  event: EventRecord;
+}
+
+const EditEvent = ({ event }: EditEventProp) => {
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+
+  const [open, setOpen] = useState(false);
+
+  const schema = useMemo(
+    () => getEditEventSchema(event.eventDate),
+    [event.eventDate],
+  );
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<EditEventValues>({
+    resolver: zodResolver(schema),
+    mode: "onTouched",
+    defaultValues: {
       title: event.title,
-      description: event.description,
       eventType: event.eventType,
+      description: event.description,
       thumbnail: event.thumbnail,
-      location: event.location,
       eventDate: event.eventDate,
-    });
-  }, [event]);
+      location: event.location,
+    },
+  });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
+  // Reset form whenever the dialog opens
+  useEffect(() => {
+    if (open) {
+      reset({
+        title: event.title,
+        eventType: event.eventType,
+        description: event.description,
+        thumbnail: event.thumbnail,
+        eventDate: event.eventDate,
+        location: event.location,
+      });
+    }
+  }, [open, event, reset]);
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // ----------------------------------
+  // 6. Submit Handler
+  // ----------------------------------
 
-  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (values: EditEventValues) => {
+    const userEmail = session?.user?.email;
 
-    if (isPending || !session?.user?.email) {
+    if (!userEmail) {
       toast.error("Please login first.");
       return;
     }
 
-    // Basic validation
-    const hasEmptyField = Object.values(formData).some(
-      (value) => !value.trim(),
-    );
-
-    if (hasEmptyField) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
     try {
-      setIsUpdating(true);
-
-      await updateEventApi(event._id, session.user.email, formData);
-
-      const updatedEvent = {
-        ...event,
-        ...formData,
-      };
-
-      onUpdated?.(updatedEvent);
+      await updateEventApi(event._id, userEmail, values);
 
       toast.success("Event updated successfully!");
 
       setOpen(false);
       router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Update event error:", error);
 
       toast.error(
-        error instanceof Error ? error.message : "Failed to update event.",
+        error instanceof Error
+          ? error.message
+          : "Failed to update event.",
       );
-    } finally {
-      setIsUpdating(false);
     }
   };
 
+  // ----------------------------------
+  // 7. UI
+  // ----------------------------------
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        if (!isSubmitting) setOpen(value);
+      }}
+    >
       <DialogTrigger
         render={
-          <Button variant="outline" className="flex-1 gap-2">
+          <Button variant="outline" className="flex-1 gap-2 cursor-pointer">
             <Pencil className="size-4" />
             Edit Event
           </Button>
@@ -155,122 +244,139 @@ const EditEvent = ({ event, onUpdated }: EditEventProp) => {
             <Pencil className="size-5" />
           </div>
 
-          <DialogTitle className="text-xl font-bold">Edit Event</DialogTitle>
+          <DialogTitle className="text-xl font-bold">
+            Edit Event
+          </DialogTitle>
 
           <DialogDescription>
             Update your event information and save your changes.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleUpdate} className="space-y-5 px-6 py-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5 px-6 py-5"
+          noValidate
+        >
           {/* Event Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Event Title</Label>
+            <Label htmlFor="title">Event Title *</Label>
+
             <Input
               id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
               placeholder="Enter event title"
               maxLength={120}
-              required
+              aria-invalid={Boolean(errors.title)}
+              {...register("title")}
             />
+
+            <FieldError message={errors.title?.message} />
           </div>
 
           {/* Event Type */}
           <div className="space-y-2">
-            <Label>Event Type</Label>
+            <Label htmlFor="eventType">Event Type *</Label>
 
-            <Select
-              value={formData.eventType}
-              onValueChange={(value) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  eventType: value ?? "",
-                }))
-              }
-              items={EVENT_TYPE_LABELS}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select event type" />
-              </SelectTrigger>
+            <Controller
+              control={control}
+              name="eventType"
+              render={({ field }) => (
+                <Select
+                  value={field.value ?? null}
+                  onValueChange={(value) => {
+                    if (value) field.onChange(value);
+                  }}
+                >
+                  <SelectTrigger
+                    id="eventType"
+                    className="w-full"
+                    aria-invalid={Boolean(errors.eventType)}
+                  >
+                    <SelectValue placeholder="Select event type" />
+                  </SelectTrigger>
 
-              <SelectContent>
-                {EVENT_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {EVENT_TYPE_LABELS[type]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  <SelectContent>
+                    {EVENT_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {EVENT_TYPE_LABELS[type]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+
+            <FieldError message={errors.eventType?.message} />
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Description *</Label>
+
             <Textarea
               id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
               placeholder="Describe your event..."
               rows={4}
               maxLength={2000}
-              required
+              aria-invalid={Boolean(errors.description)}
+              {...register("description")}
             />
+
+            <FieldError message={errors.description?.message} />
           </div>
 
           {/* Thumbnail */}
           <div className="space-y-2">
             <Label htmlFor="thumbnail">
               <Image className="mr-1 inline size-4" />
-              Thumbnail URL
+              Thumbnail URL *
             </Label>
 
             <Input
               id="thumbnail"
-              name="thumbnail"
               type="url"
-              value={formData.thumbnail}
-              onChange={handleChange}
               placeholder="https://example.com/image.jpg"
-              required
+              aria-invalid={Boolean(errors.thumbnail)}
+              {...register("thumbnail")}
             />
+
+            <FieldError message={errors.thumbnail?.message} />
           </div>
 
-          {/* Date and Location */}
+          {/* Date & Location */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="eventDate">
                 <CalendarDays className="mr-1 inline size-4" />
-                Event Date
+                Event Date *
               </Label>
 
               <Input
                 id="eventDate"
-                name="eventDate"
                 type="date"
-                value={formData.eventDate}
-                onChange={handleChange}
-                required
+                min={getTodayDate()}
+                aria-invalid={Boolean(errors.eventDate)}
+                {...register("eventDate")}
               />
+
+              <FieldError message={errors.eventDate?.message} />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="location">
                 <MapPin className="mr-1 inline size-4" />
-                Location
+                Location *
               </Label>
 
               <Input
                 id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
                 placeholder="Event location"
                 maxLength={160}
-                required
+                aria-invalid={Boolean(errors.location)}
+                {...register("location")}
               />
+
+              <FieldError message={errors.location?.message} />
             </div>
           </div>
 
@@ -280,17 +386,17 @@ const EditEvent = ({ event, onUpdated }: EditEventProp) => {
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              disabled={isUpdating}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
 
             <Button
               type="submit"
-              disabled={isUpdating || isPending}
               className="gap-2"
+              disabled={isSubmitting}
             >
-              {isUpdating ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
                   Updating...
