@@ -148,34 +148,9 @@ const ManageEvents = () => {
                 </div>
 
                 <div className="mt-6 flex gap-3">
-                  {/* <EditEvent event={event} /> */}
-                  {events.map((event) => (
-                    <div key={event._id}>
-                      {/* Your event card */}
+                  <EditEvent event={event} />
 
-                      <EditEvent
-                        event={event}
-                        onUpdated={(updatedEvent) => {
-                          setEvents((prev) =>
-                            prev.map((item) =>
-                              item._id === updatedEvent._id
-                                ? updatedEvent
-                                : item,
-                            ),
-                          );
-                        }}
-                      />
-                    </div>
-                  ))}
-
-                  <DeleteEvent
-                    event={event}
-                    onDeleted={(id) => {
-                      setEvents((prev) =>
-                        prev.filter((item) => item._id !== id),
-                      );
-                    }}
-                  />
+                  <DeleteEvent event={event} />
                 </div>
               </div>
             </article>

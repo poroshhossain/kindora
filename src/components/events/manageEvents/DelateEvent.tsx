@@ -1,9 +1,11 @@
+
 "use client";
 
-import { Loader2, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,19 +24,19 @@ import type { EventRecord } from "@/types/types";
 
 interface DeleteEventProps {
   event: EventRecord;
-  onDeleted?: (id: string) => void;
 }
 
-const DeleteEvent = ({ event, onDeleted }: DeleteEventProps) => {
+const DeleteEvent = ({ event }: DeleteEventProps) => {
   const router = useRouter();
-
   const { data: session, isPending } = authClient.useSession();
 
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (isPending || !session?.user?.email) {
+    const userEmail = session?.user?.email;
+
+    if (!userEmail) {
       toast.error("Please login first.");
       return;
     }
@@ -42,19 +44,17 @@ const DeleteEvent = ({ event, onDeleted }: DeleteEventProps) => {
     try {
       setIsDeleting(true);
 
-      await deleteEventApi(event._id, session.user.email);
+      await deleteEventApi(event._id, userEmail);
 
       toast.success("Event deleted successfully!");
-
-      onDeleted?.(event._id);
-
       setOpen(false);
       router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Delete event error:", error);
 
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete event.",
+        error instanceof Error ? error.message : "Failed to delete event."
       );
     } finally {
       setIsDeleting(false);
@@ -86,13 +86,17 @@ const DeleteEvent = ({ event, onDeleted }: DeleteEventProps) => {
 
           <AlertDialogDescription>
             Are you sure you want to delete{" "}
-            <span className="font-semibold text-foreground">{event.title}</span>
+            <span className="font-semibold text-foreground">
+              {event.title}
+            </span>
             ? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>
+            Cancel
+          </AlertDialogCancel>
 
           <AlertDialogAction
             onClick={(e) => {
