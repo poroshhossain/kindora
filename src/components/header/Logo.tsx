@@ -1,12 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
 
-const Logo = ({setIsOpen}: {setIsOpen:any}) => {
+const Logo = () => {
   return (
      <Link
           href="/"
           className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          onClick={() => setIsOpen(false)}
+          
         >
           <Image
             src="/images/kindora-logo.png"

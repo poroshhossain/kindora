@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "../header/Logo";
 
 const exploreLinks = [
   { label: "Home", href: "/" },
@@ -49,18 +50,9 @@ const Footer = async () => {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr]">
           {/* Brand */}
           <div className="space-y-4">
-            <Link
-              href="/"
-              className="inline-block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Image
-                src="/images/kindora-logo.png"
-                alt="Kindora"
-                width={150}
-                height={100}
-                className="h-auto w-32 object-contain"
-              />
-            </Link>
+            <div className="py-1">
+              <Logo />
+            </div>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
               Empowering communities to build, join, and track impactful social
               development events in local neighborhoods.
