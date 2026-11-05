@@ -1,27 +1,23 @@
 import { CalendarCheck, CalendarCog, CalendarPlus } from "lucide-react";
-import Link from "next/link";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
+import ActionLinks from "./ActionLinks";
 
 const headerLinks = [
-  { lavel: " Create Event", path: "/create-event", icon: CalendarPlus },
-  { lavel: " Manage Events", path: "/manage-events", icon: CalendarCog },
-  { lavel: " join Event", path: "/join-events", icon: CalendarCheck },
+  { label: "Create Event", path: "/create-event", icon: CalendarPlus },
+  { label: "Manage Events", path: "/manage-events", icon: CalendarCog },
+  { label: "Join Event", path: "/join-events", icon: CalendarCheck },
 ];
+
 const HeaderActionItem = () => {
   return (
     <>
-      {headerLinks.map((item) => {
-        const Icon = item.icon;
-        return (
-          <DropdownMenuItem key={item.lavel}>
-            <Link href={item.path} className="flex items-center gap-2">
-              <Icon size={3} />
-              {item.lavel}
-            </Link>
-          </DropdownMenuItem>
-        );
-      })}
+      {headerLinks.map((item) => (
+        <DropdownMenuItem key={item.path}>
+          <ActionLinks item={item} />
+        </DropdownMenuItem>
+      ))}
     </>
   );
 };
+
 export default HeaderActionItem;
